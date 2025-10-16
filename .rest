@@ -1,0 +1,43 @@
+//Localhost
+###GET
+GET http://localhost:8080 HTTP/1.1
+
+###GET apostles
+GET http://localhost:8080/apostles HTTP/1.1
+
+###Get by id
+//Christofferson
+GET http://localhost:8080/68f162240d1257f5e9b8546c HTTP/1.1
+
+###Post new apostle
+POST http://localhost:8080/apostles HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName": "Dallin",
+    "lastName": "Oaks",
+    "age": 93,
+    "profession": "Lawyer"      
+}
+
+###Update apostle by id
+
+
+###Delete by id
+
+
+//Production
+
+###GET
+
+
+###Get by id
+
+
+###Post new apostle
+
+###Update apostle by id
+
+
+###Delete by id
+

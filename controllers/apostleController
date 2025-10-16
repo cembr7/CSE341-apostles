@@ -1,0 +1,117 @@
+const { getDb } = require('../database/dbConnect');
+const { ObjectId } = require('mongodb');
+
+const getAllApostles = async (req, res, next) => {
+  try {
+    const db = getDb();
+    const collection = db.collection('apostles');
+    const result = await collection.find().toArray();
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching apostles:', error.message, error.stack);
+    res.status(500).json({ message: 'Error fetching apostles', error: error.message });
+  }
+};
+
+const getSingleApostle = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const db = getDb();
+    const collection = db.collection('apostles');
+    let result;
+    try {
+      result = await collection.findOne({ _id: new ObjectId(userId) });
+    } catch (err) {
+      console.log('getSingleApostle: Invalid ObjectId format for _id:', userId);
+      return res.status(400).json({ message: 'Invalid apostle ID format' });
+    }
+    if (!result) {
+      console.log('getSingleApostle: No document found for _id:', userId);
+      return res.status(404).json({ message: 'Apostle not found' });
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching apostle:', error.message, error.stack);
+    res.status(500).json({ message: 'Error fetching apostle', error: error.message });
+  }
+};
+
+const addApostle = async (req, res) => {
+  try {
+    const db = getDb();
+    const apostle = req.body;
+
+    if (!apostle || !apostle.firstName || !apostle.lastName || !apostle.age) {
+      return res.status(400).json({ message: 'Invalid apostle data: firstName, lastName, and age are required' });
+    }
+
+    const apostleCollection = db.collection('apostles');
+    const result = await apostleCollection.insertOne(apostle);
+    const insertedApostle = await apostleCollection.findOne({ _id: result.insertedId });
+
+    res.setHeader('Location', `/apostles/${insertedApostle._id}`);
+    res.status(201).json(insertedApostle);
+  } catch (error) {
+    console.error('Error adding apostle:', error.message, error.stack);
+    res.status(500).json({ message: 'Error adding apostle', error: error.message });
+  }
+};
+
+const updateApostle = async (req, res) => {
+  try {
+    const db = getDb();
+    const apostleId = req.params.id;
+    const updateData = req.body;
+
+    if (!updateData || Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message: 'Invalid apostle data: update data is required' });
+    }
+
+    delete updateData._id;
+
+    const apostleCollection = db.collection('apostles');
+    const result = await apostleCollection.findOneAndUpdate(
+      { _id: new ObjectId(apostleId) },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    );
+    // Debugging log
+    if (!result) {
+      return res.status(404).json({ message: 'Apostle not found' });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error updating apostle:', error.message, error.stack);
+    if (error.name === 'BSONTypeError') {
+      return res.status(400).json({ message: 'Invalid apostle ID format' });
+    }
+    res.status(500).json({ message: 'Error updating apostle', error: error.message });
+  }
+};
+
+const deleteApostle = async (req, res) => {
+  try {
+    const db = getDb();
+    const apostleId = req.params.id;
+
+    const apostleCollection = db.collection('apostles');
+    const result = await apostleCollection.deleteOne({ _id: new ObjectId(apostleId) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Apostle not found' });
+    }
+
+    res.status(200).send(); // Fixed: Changed from 200 to 204
+  } catch (error) {
+    console.error('Error deleting apostle:', error.message, error.stack);
+    if (error.name === 'BSONTypeError') {
+      return res.status(400).json({ message: 'Invalid apostle ID format' });
+    }
+    res.status(500).json({ message: 'Error deleting apostle', error: error.message });
+  }
+};
+
+module.exports = { getAllApostles, getSingleApostle, addApostle, updateApostle, deleteApostle };
