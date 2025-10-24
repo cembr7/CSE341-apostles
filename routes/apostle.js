@@ -1,6 +1,7 @@
 const express = require('express'); 
 const routes = express.Router();
-const { getAllApostles, getSingleApostle, addApostle, updateApostle, deleteApostle } = require('../controllers/apostleController');
+const { getAllApostles, getSingleApostle, createApostle, updateApostle, deleteApostle } = require('../controllers/apostleController');
+const { validateAllApostles,validateSingleApostle, validateCreateApostle, validateUpdateApostle, validateDeleteApostle } = require('../middleware/routeValidation');
 
 /**
  * @route GET /apostles
@@ -9,7 +10,7 @@ const { getAllApostles, getSingleApostle, addApostle, updateApostle, deleteApost
  * @returns 200 - Success
  * @returns 500 - Server error
  */
-routes.get('/', getAllApostles);
+routes.get('/', validateAllApostles, getAllApostles);
 
 /**
  * @route GET /apostle/:id
@@ -20,7 +21,7 @@ routes.get('/', getAllApostles);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.get('/:id', getSingleApostle);  
+routes.get('/:id', validateSingleApostle, getSingleApostle);  
 
 /**
  * @route POST /apostle
@@ -31,7 +32,8 @@ routes.get('/:id', getSingleApostle);
  * @returns 400 - Bad request
  * @returns 500 - Server error
  */
-routes.post('/', addApostle);
+routes.post('/', validateCreateApostle, createApostle);
+
 
 /**
  * @route PUT /apostle/:id
@@ -44,7 +46,7 @@ routes.post('/', addApostle);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.put('/:id', updateApostle); 
+routes.put('/:id', validateUpdateApostle, updateApostle); 
 
 /**
  * @route DELETE /apostle/:id
@@ -55,6 +57,6 @@ routes.put('/:id', updateApostle);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.delete('/:id', deleteApostle);
+routes.delete('/:id', validateDeleteApostle, deleteApostle);
 
 module.exports = routes;
