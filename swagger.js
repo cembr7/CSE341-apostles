@@ -11,7 +11,7 @@ const doc = {
   schemes: [process.env.NODE_ENV === "production" ? 'https' : 'http'],*/
   /*host: 'cse341-apostles-cy3a.onrender.com',
   schemes: ['http', 'https'],*/
-  host: 'http://localhost:8080',
+  host: 'localhost:8080',
   schemes: ['http']
 };
 

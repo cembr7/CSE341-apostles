@@ -5,7 +5,7 @@
     "description": "API for managing apostles",
     "version": "1.0.0"
   },
-  "host": "http://localhost:8080",
+  "host": "localhost:8080",
   "basePath": "/",
   "schemes": [
     "http"
@@ -17,9 +17,24 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -35,13 +50,13 @@
             "schema": {
               "type": "object",
               "properties": {
+                "age": {
+                  "example": "any"
+                },
                 "firstName": {
                   "example": "any"
                 },
                 "lastName": {
-                  "example": "any"
-                },
-                "age": {
                   "example": "any"
                 }
               }

@@ -21,6 +21,10 @@ app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Apostle API. Try /apostles for apostles.');
