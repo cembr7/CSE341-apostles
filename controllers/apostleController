@@ -38,7 +38,7 @@ const getSingleApostle = async (req, res, next) => {
   }
 };
 
-const addApostle = async (req, res) => {
+const createApostle = async (req, res) => {
   try {
     const db = getDb();
     const apostle = req.body;
@@ -55,9 +55,19 @@ const addApostle = async (req, res) => {
     res.status(201).json(insertedApostle);
   } catch (error) {
     console.error('Error adding apostle:', error.message, error.stack);
-    res.status(500).json({ message: 'Error adding apostle', error: error.message });
+    res.status(400).json({ message: 'Error adding apostle', error: error.message });
+  }
+   try {
+    console.log('POST /api/apostles handler called', JSON.stringify(req.body, null, 2));
+    const apostle = new Apostle(req.body);
+    await apostle.save();
+    res.status(201).json({ status: 'success', data: apostle });
+  } catch (error) {
+    console.error('POST /api/apostles error:', error);
+    res.status(500).json({ status: 'error', message: 'Server error', error: error.message });
   }
 };
+
 
 const updateApostle = async (req, res) => {
   try {
@@ -114,4 +124,4 @@ const deleteApostle = async (req, res) => {
   }
 };
 
-module.exports = { getAllApostles, getSingleApostle, addApostle, updateApostle, deleteApostle };
+module.exports = { getAllApostles, getSingleApostle, createApostle, updateApostle, deleteApostle };

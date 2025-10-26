@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Contact API",
-    "description": "API for managing contacts",
+    "title": "Apostle API",
+    "description": "API for managing apostles",
     "version": "1.0.0"
   },
   "host": "http://localhost:8080",

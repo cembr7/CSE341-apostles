@@ -9,6 +9,7 @@ const cors = require('cors');
 //possibly need
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const { validateCreateApostle, validateAllApostles } = require('./middleware/routeValidation');
 
 //localhost
 const port = process.env.PORT || 8080;
@@ -25,7 +26,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Apostle API. Try /apostles for apostles.');
 });
 
-app.get('/apostles', async (req, res) => {
+app.get('/apostles', validateAllApostles, async (req, res) => {
   try {
     const db = getDb();
     const apostleCollection = await db.collection('apostles');
@@ -41,23 +42,23 @@ app.get('/apostles', async (req, res) => {
   }
 });
 
-app.post('/apostles', async (req, res) => {
+app.post('/apostles', validateCreateApostle, async (req, res) => {
     try {
         const db = getDb();
         const apostlesCollection = db.collection('apostles');
 
-        // Validate incoming data
+        /*// Validate incoming data
         const { firstName, lastName, age, profession } = req.body;
         if (!firstName || !lastName) {
           return res.status(400).json({ error: 'firstName and lastName are required' });
-        }
+        }*/
 
-        // Create the document to insert
+       // Create the document to insert
         const newApostle = {
-          firstName,
-          lastName,
-          age: age || null,
-          profession: profession || 'Unknown',
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          age: req.body.age,
+          profession: req.body.profession,
           createdAt: new Date(),
         };
 

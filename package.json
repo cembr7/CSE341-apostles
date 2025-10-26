@@ -20,14 +20,17 @@
   },
   "homepage": "https://github.com/cembr7/CSE341-apostles#readme",
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "nodemon": "^3.1.10"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-validator": "^7.3.0",
+    "joi": "^18.0.1",
     "mongodb": "^6.20.0",
-    "mongoose": "^8.19.1",
+    "mongoose": "^8.19.2",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   }
