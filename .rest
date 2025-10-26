@@ -18,7 +18,7 @@ POST http://localhost:8080/apostles HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "Ronald",
+    "firstName": "Ronald A.",
     "lastName": "Rasband",
     "age": 80,
     "profession": "Inspiration rocks!"      
@@ -31,12 +31,12 @@ content-type: application/json
 {
      "firstName": "Gary",
     "lastName": "Stevenson",
-    "age": "",
+    "age": "75",
     "profession": "Double"    
 }
 
 ###Delete by id
-DELETE http://localhost:8080/apostle/68face93beb9f4613e2220d9 HTTP/1.1
+DELETE http://localhost:8080/apostle/68fad7c012b5e011b0c34c07 HTTP/1.1
 
 //Production
 
