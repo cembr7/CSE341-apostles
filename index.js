@@ -5,6 +5,8 @@ const routes = require('./routes');
 const { getAllApostles } = require('./controllers/apostleController');
 require('dotenv').config();
 const cors = require('cors');
+const {clientID, clientSecret, callbackURL} = require('./config/github'); 
+
 
 //possibly need
 const swaggerUi = require('swagger-ui-express');
