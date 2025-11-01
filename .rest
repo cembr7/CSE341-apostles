@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ###Update apostle by id
-PUT http://localhost:8080/apostle/68fad7c012b5e011b0c34c07 HTTP/1.1
+PUT http://localhost:8080/apostle/68fdb63e89b1319d81cb9056 HTTP/1.1
 content-type: application/json
 
 {
@@ -48,7 +48,7 @@ GET https://cse341-apostles.onrender.com/apostles
 
 
 ###Get by id
-GET https://cse341-apostles.onrender.com/apostles/68f162240d1257f5e9b8546c
+GET https://cse341-apostles.onrender.com/apostle/68fdb45d3e377d83b0f920ef
 
 ###Post new apostle
 POST https://cse341-apostles.onrender.com/apostles HTTP/1.1
@@ -62,16 +62,16 @@ Content-Type: application/json
 }
 
 ###Update apostle by id
-PUT https://cse341-apostles.onrender.com/apostle/68f958a1d0c606de1cbb0fb0 HTTP/1.1
+PUT https://cse341-apostles.onrender.com/apostle/68fdb45d3e377d83b0f920ef HTTP/1.1
 content-type: application/json
 
 {
     "firstName": "Gary",
     "lastName": "Stevenson",
-    "age": 70,
+    "age": 7,
     "profession": "Business"    
 }
 
 
 ###Delete by id
-DELETE https://cse341-apostles.onrender.com/apostle/68e20070c834762895d9e3fd
+DELETE https://cse341-apostles.onrender.com/apostle/68fdb68789b1319d81cb9058
