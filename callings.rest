@@ -1,0 +1,62 @@
+
+//Localhost callings
+###GET
+GET http://localhost:8080 HTTP/1.1
+
+###GET apostles
+GET http://localhost:8080/callings HTTP/1.1
+
+###Get apostle by id
+//Christofferson
+GET http://localhost:8080/apostle/68f162240d1257f5e9b8546c HTTP/1.1
+
+### Get apostle by id
+//not sure
+GET http://localhost:8080/apostle68face93beb9f4613e2220d9
+
+###Post new apostle
+POST http://localhost:8080/apostles HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName": "Ronald A.",
+    "lastName": "Rasband",
+    "age": 80,
+    "profession": "Inspiration rocks!"      
+}
+
+###Update apostle by id
+PUT http://localhost:8080/apostle/68fdb63e89b1319d81cb9056 HTTP/1.1
+content-type: application/json
+
+{
+     "firstName": "Gary",
+    "lastName": "Stevenson",
+    "age": "75",
+    "profession": "Double"    
+}
+
+###Delete by id
+DELETE http://localhost:8080/apostle/68fad7c012b5e011b0c34c07 HTTP/1.1
+
+
+
+
+
+
+
+  {
+    "Name": "Patrick Kearon",
+    "Age": 64,
+    "Number of talks": 7,
+    "Served a Mission": "false",
+    "Bishop": "false",
+    "Stake President": "true",
+    "Mission President": "false",
+    "Church college /University President": "false",
+    "Regional Rep/Area Seventy": "true",
+    "General Authority Seventy": "true",
+    "Area President": "true",
+    "Presidency of the Seventy": "true",
+    "Presiding Bishopric": "false"
+  }
