@@ -137,7 +137,7 @@ const getApostleCallings = async (req, res, next) => {
   }
 };
 
-const getSingleApostleCalling = async (req, res, next) => {
+const getSingleApostleCallings = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const db = getDb();
@@ -161,7 +161,9 @@ const getSingleApostleCalling = async (req, res, next) => {
   }
 };
 
-/*const createApostleCallings = async (req, res) => {
+// Create a new apostle calling
+//still needs work
+const createApostleCallings = async (req, res) => {
   try {
     const db = getDb();
     const apostle = req.body;
@@ -189,10 +191,10 @@ const getSingleApostleCalling = async (req, res, next) => {
     console.error('POST /api/apostles error:', error);
     res.status(500).json({ status: 'error', message: 'Server error', error: error.message });
   }
-};*/
-
-
-/*const updateApostleCallings = async (req, res) => {
+};
+// Update an existing apostle calling
+// still needs work
+const updateApostleCalling = async (req, res) => {
   try {
     const db = getDb();
     const apostleId = req.params.id;
@@ -223,7 +225,7 @@ const getSingleApostleCalling = async (req, res, next) => {
     }
     res.status(500).json({ message: 'Error updating apostle', error: error.message });
   }
-};*/
+};
 
 const deleteApostleCalling = async (req, res) => {
   try {
@@ -248,4 +250,4 @@ const deleteApostleCalling = async (req, res) => {
 };
 
 module.exports = { getAllApostles, getSingleApostle, createApostle, updateApostle, deleteApostle };
-module.exports = { getApostleCallings, getSingleApostleCalling, createApostleCalling, updateApostleCalling, deleteApostleCalling };
+module.exports = { getApostleCallings, getSingleApostleCallings, createApostleCallings, updateApostleCalling, deleteApostleCalling };

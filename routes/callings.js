@@ -2,9 +2,10 @@ const express = require('express');
 const routes = express.Router();
 const { getApostleCallings, getSingleApostleCallings, createApostleCallings, updateApostleCallings, deleteApostleCallings } = require('../controllers/apostleController');
 //const { validateAllApostles,validateSingleApostle, validateCreateApostle, validateUpdateApostle, validateDeleteApostle } = require('../middleware/routeValidation');
-const { getApostleCallings } = require('../controllers/apostleController');
+/*const { getApostleCallings } = require('../controllers/apostleController');
 const { createApostleCalling } = require('../controllers/apostleController');
 const { updateApostleCalling } = require('../controllers/apostleController');
+*/
 
 /**
  * @route GET /callings
@@ -35,7 +36,7 @@ routes.get('/:id', /*validateSingleApostle,*/ getSingleApostleCallings);
  * @returns 400 - Bad request
  * @returns 500 - Server error
  */
-routes.post('/', /*validateCreateApostle,*/ createApostleCalling);
+routes.post('/', /*validateCreateApostle,*/ createApostleCallings);
 
 
 /**
@@ -49,7 +50,7 @@ routes.post('/', /*validateCreateApostle,*/ createApostleCalling);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.put('/:id', /*validateUpdateApostle,*/ updateApostleCalling); 
+routes.put('/:id', /*validateUpdateApostle,*/ updateApostleCallings); 
 
 /**
  * @route DELETE /callings/:id
