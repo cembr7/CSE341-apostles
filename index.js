@@ -4,6 +4,7 @@ const routes = require('./routes');
 const { getAllApostles } = require('./controllers/apostleController');
 require('dotenv').config();
 const cors = require('cors');
+const app = express();
 
 // GitHub OAuth config
 const session = require('express-session');
@@ -77,7 +78,7 @@ app.get('logout', (req, res) => {
 //localhost
 const port = process.env.PORT || 8080;
 
-const app = express();
+
 // CORS setup
 app.use(cors());
 
