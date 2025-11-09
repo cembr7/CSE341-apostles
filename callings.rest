@@ -9,6 +9,10 @@ GET http://localhost:8080/callings HTTP/1.1
 //Christofferson
 GET http://localhost:8080/callings/68f162240d1257f5e9b8546c HTTP/1.1
 
+###
+//Andersen
+GET http://localhost:8080/callings/690629770d1257f5e9b8547c
+
 ### Get callings by id
 //not sure
 GET http://localhost:8080/callings/68face93beb9f4613e2220d9
@@ -40,7 +44,7 @@ content-type: application/json
   {
     "Name": "Patrick Kearon",
     "Age": 64,
-    "Number of talks": 7,
+    "Number of talks": 1,
     "Served a Mission": "false",
     "Bishop": "false",
     "Stake President": "true",
