@@ -1,11 +1,9 @@
 const express = require('express'); 
 const routes = express.Router();
-const { getApostleCallings, getSingleApostleCallings, createApostleCallings, updateApostleCallings, deleteApostleCallings } = require('../controllers/apostleController');
-//const { validateAllApostles,validateSingleApostle, validateCreateApostle, validateUpdateApostle, validateDeleteApostle } = require('../middleware/routeValidation');
-/*const { getApostleCallings } = require('../controllers/apostleController');
-const { createApostleCalling } = require('../controllers/apostleController');
-const { updateApostleCalling } = require('../controllers/apostleController');
-*/
+/*const callingsCtrl = require('../controllers/apostleCallingsController');
+console.log('📦 callingsCtrl exported keys →', Object.keys(callingsCtrl));*/
+const { getApostleCallings, getSingleApostleCallings, createApostleCallings, updateApostleCallings, deleteApostleCallings } = require('../controllers/callingsController');
+
 
 /**
  * @route GET /callings
@@ -14,7 +12,7 @@ const { updateApostleCalling } = require('../controllers/apostleController');
  * @returns 200 - Success
  * @returns 500 - Server error
  */
-routes.get('/', /*validateAllApostles,*/ getApostleCallings);
+routes.get('/', getApostleCallings);
 
 /**
  * @route GET /callings/:id
@@ -25,7 +23,7 @@ routes.get('/', /*validateAllApostles,*/ getApostleCallings);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.get('/:id', /*validateSingleApostle,*/ getSingleApostleCallings);  
+routes.get('/:id', getSingleApostleCallings);  
 
 /**
  * @route POST /callings
@@ -36,7 +34,7 @@ routes.get('/:id', /*validateSingleApostle,*/ getSingleApostleCallings);
  * @returns 400 - Bad request
  * @returns 500 - Server error
  */
-routes.post('/', /*validateCreateApostle,*/ createApostleCallings);
+routes.post('/', createApostleCallings);
 
 
 /**
@@ -50,7 +48,7 @@ routes.post('/', /*validateCreateApostle,*/ createApostleCallings);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.put('/:id', /*validateUpdateApostle,*/ updateApostleCallings); 
+routes.put('/:id', updateApostleCallings); 
 
 /**
  * @route DELETE /callings/:id
@@ -61,6 +59,6 @@ routes.put('/:id', /*validateUpdateApostle,*/ updateApostleCallings);
  * @returns 404 - Contact not found
  * @returns 500 - Server error
  */
-routes.delete('/:id', /*validateDeleteApostle,*/ deleteApostleCallings);
+routes.delete('/:id', deleteApostleCallings);
 
 module.exports = routes;
