@@ -1,18 +1,83 @@
 const express = require('express');
-const app = express();
 const { initDb, getDb } = require('./database/dbConnect');
 const routes = require('./routes');
 const { getAllApostles } = require('./controllers/apostleController');
 require('dotenv').config();
 const cors = require('cors');
+const app = express();
+
+// GitHub OAuth config
+const session = require('express-session');
+const passport = require('passport');
+const OAuth2Strategy = require('passport-oauth2');
+const crypto = require('crypto');
+const {clientID, clientSecret, callbackURL} = require('./config/github'); 
+
 
 //possibly need
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const { validateCreateApostle, validateAllApostles } = require('./middleware/routeValidation');
 
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
+
+//PKCE implementation
+function generatePKCE() {
+    const verifier = crypto.randomBytes(32).toString('hex');
+    const challenge = crypto.createHash('sha256').update(verifier).digest('base64url');
+    return { verifier, challenge };
+}
+
+// OAuth2 Strategy setup
+passport.use(new OAuth2Strategy({
+    authorizationURL: 'https://github.com/login/oauth/authorize',
+    tokenURL: 'https://github.com/login/oauth/access_token',
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: 'http://localhost:8080/auth/github/callback',
+    scope: ['read:user', 'user:email'],
+    state: true,
+},
+(accessToken, refreshToken, profile, cb, done) => {
+  fetch('https://api.github.com/user', {
+    headers: {
+      Authorization: `token ${accessToken}`}
+  })
+    .then(res => res.json())
+    .then(user => cb(null, {...user, accessToken}))
+    .then(profile => done(null, profile))
+    .catch(err => done(err));
+  }
+));
+
+// Routes for authentication
+app.get('/auth/github', (req, res, next) => {
+    const { verifier, challenge } = generatePKCE();
+    req.session.pkceVerifier = verifier;
+    passport.authenticate('oauth2', {
+        codeChallenge: challenge,
+        codeChallengeMethod: 'S256',
+    })(req, res, next);
+});
+
+app.get('/auth/github/callback',
+    passport.authenticate('oauth2', { failureRedirect: '/' }),
+    (req, res) => {
+      // Successful authentication
+        res.redirect('/'); // Redirect to home or dashboard after successful login
+    }
+);
+
+app.get('logout', (req, res) => {
+    req.logout(() => {
+        res.redirect('/');
+    });
+});
+
 //localhost
 const port = process.env.PORT || 8080;
+
 
 // CORS setup
 app.use(cors());

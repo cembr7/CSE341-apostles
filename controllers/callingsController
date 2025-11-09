@@ -1,0 +1,111 @@
+const { getDb } = require('../database/dbConnect');
+const { ObjectId } = require('mongodb');
+
+const getApostleCallings = async (req, res, next) => {
+  try {
+    const db = getDb();
+    const collection = db.collection('callings');
+    const result = await collection.find().toArray();
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching callings:', error.message, error.stack);
+    res.status(500).json({ message: 'Error fetching callings', error: error.message });
+  }
+};
+
+const getSingleApostleCallings = async (req, res, next) => {
+  try {
+    const callingId = req.params.id;
+    const db = getDb();
+    const collection = db.collection('callings');
+    let result;
+    try {
+      result = await collection.findOne({ _id: new ObjectId(callingId) });
+    } catch (err) {
+      console.log('getSingleApostleCallings: Invalid ObjectId format for _id:', callingId);
+      return res.status(400).json({ message: 'Invalid calling ID format' });
+    }
+
+    if (!result) {
+      return res.status(404).json({ message: 'Calling not found' });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching calling:', error.message, error.stack);
+    res.status(500).json({ message: 'Error fetching calling', error: error.message });
+  }
+};
+
+const createApostleCallings = async (req, res) => {
+  try {
+    const db = getDb();
+    const callingData = req.body;
+
+    const collection = db.collection('callings');
+    const result = await collection.insertOne(callingData);
+
+    res.status(201).json(result.ops[0]);
+  } catch (error) {
+    console.error('Error creating calling:', error.message, error.stack);
+    res.status(500).json({ message: 'Error creating calling', error: error.message });
+  }
+};
+
+const updateApostleCallings = async (req, res) => {
+  try {
+    const callingId = req.params.id;
+    const updateData = req.body;
+    const db = getDb();
+    const collection = db.collection('callings');
+
+    let result;
+    try {
+      result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(callingId) },
+        { $set: updateData },
+        { returnOriginal: false }
+      );
+    } catch (err) {
+      console.log('updateApostleCalling: Invalid ObjectId format for _id:', callingId);
+      return res.status(400).json({ message: 'Invalid calling ID format' });
+    }
+
+    if (!result.value) {
+      return res.status(404).json({ message: 'Calling not found' });
+    }
+
+    res.status(200).json(result.value);
+  } catch (error) {
+    console.error('Error updating calling:', error.message, error.stack);
+    res.status(500).json({ message: 'Error updating calling', error: error.message });
+  }
+};
+
+const deleteApostleCallings = async (req, res) => {
+  try {
+    const callingId = req.params.id;
+    const db = getDb();
+    const collection = db.collection('callings');
+
+    let result;
+    try {
+      result = await collection.deleteOne({ _id: new ObjectId(callingId) });
+    } catch (err) {
+      console.log('deleteApostleCalling: Invalid ObjectId format for _id:', callingId);
+      return res.status(400).json({ message: 'Invalid calling ID format' });
+    }
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Calling not found' });
+    }
+
+    res.status(200).json({ message: 'Calling deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting calling:', error.message, error.stack);
+    res.status(500).json({ message: 'Error deleting calling', error: error.message });
+  }
+};  
+
+module.exports = { getApostleCallings, getSingleApostleCallings, createApostleCallings, updateApostleCallings, deleteApostleCallings };
