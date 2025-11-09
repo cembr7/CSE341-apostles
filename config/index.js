@@ -1,4 +1,4 @@
-const defaultConfig = require('./github');
+/*const defaultConfig = require('./github');
 const localConfig = require('./local'); // fails silently if missing
 
-module.exports = { ...defaultConfig, ...localConfig };
+module.exports = { ...defaultConfig, ...localConfig };*/
