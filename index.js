@@ -1,17 +1,154 @@
 const express = require('express');
 const { initDb, getDb } = require('./database/dbConnect');
 const routes = require('./routes');
-const { getAllApostles } = require('./controllers/apostleController');
+//const { getAllApostles } = require('./controllers/apostleController');
 require('dotenv').config();
 const cors = require('cors');
+const config = require('./config/github');
+const { port } = config;
+
+console.log('GitHub Config:', {
+  clientID: config.github.clientID ? 'OK' : 'MISSING',
+  clientSecret: config.github.clientSecret ? 'OK' : 'MISSING',
+  callbackURL: config.github.callbackURL
+});
+
+
+const session = require('express-session');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github2').Strategy;
+
 const app = express();
 
+//Session setup
+app.use(session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+//Passport setup
+passport.use(new GitHubStrategy({
+    clientID: config.github.clientID,
+    clientSecret: config.github.clientSecret,
+    callbackURL: config.github.callbackURL
+  },
+  (accessToken, refreshToken, profile, done) => {
+    //Attach tokens to user profile
+    const user = {
+      id: profile.id,
+      username: profile.username,
+      displayName: profile.displayName,
+      accessToken,
+    };
+    return done(null, user);
+  }
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+/*
+const {
+  port,
+  sessionSecret,
+  githubClientID,
+  githubClientSecret,
+  githubCallbackURL
+} = require('./config');
+
+const app = express();
+
+//Session setup
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+//Passport setup
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Serialize and deserialize user
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
+
+//GitHub Strategy
+passport.use(new GitHubStrategy({
+    clientID: githubClientID,
+    clientSecret: githubClientSecret,
+    callbackURL: 'auth/github/callback'
+  },
+  (accessToken, refreshToken, profile, done) => done(null, profile)
+));
+
+//Attach tokens to user profile
+const user = {
+  id: profile.id,
+  username: profile.username,
+  displayName: profile.displayName,
+  accessToken: accessToken
+};
+return done(null, user);
+
+//Routes for authentication
+app.get('/', (req, res) => {
+  const html = `<h1>Authentication</h1>
+  ${
+    eq.isAuthenticated() 
+    ? ` <p>Hello, ${req.user.username}!</p>  
+        <a href="/logout">Logout</a>` 
+        : '<a href="/auth/github">Login with GitHub</a>'
+  }
+  `;
+  res.send(html);
+  });
+
+  //Oauth flow
+  app.get('/auth/github',
+    passport.authenticate('github'));
+  
+
+  //GitHub redirect
+  app.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/' }),
+    (req, res) => {
+      //Successful authentication
+      res.redirect('/');
+    }
+);
+
+//Protected route example
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/');
+}
+
+app.get('/profile', ensureAuthenticated, (req, res) => {
+    res.json({ user: req.user });
+});
+
+//logout route
+app.get('/logout', (req, res) => {
+    req.logout(() => {
+        res.redirect('/');
+    });
+});
+
+ */ 
+
 // GitHub OAuth config
-const session = require('express-session');
+/*const session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2');
 const crypto = require('crypto');
-const {clientID, clientSecret, callbackURL} = require('./config/github'); 
+const {clientID, clientSecret, callbackURL} = require('./config/github'); */
 
 
 //possibly need
@@ -19,7 +156,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const { validateCreateApostle, validateAllApostles } = require('./middleware/routeValidation');
 
-passport.serializeUser((user, done) => done(null, user));
+/*passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 
 //PKCE implementation
@@ -73,10 +210,10 @@ app.get('logout', (req, res) => {
     req.logout(() => {
         res.redirect('/');
     });
-});
+});*/
 
 //localhost
-const port = process.env.PORT || 8080;
+//const port = process.env.PORT || 8080;
 
 
 // CORS setup
