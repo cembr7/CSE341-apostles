@@ -1,7 +1,10 @@
 require('dotenv').config();
 
 const port = process.env.PORT || 8080;
-const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
+const isProduction = process.env.NODE_ENV === 'production';
+const baseUrl =  isProduction 
+    ? process.env.BASE_URL || `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'cse341-apostles.onrender.com'}`
+  : `http://localhost:${port}`;
 
 module.exports = {
     port: process.env.PORT || 8080,
@@ -10,8 +13,6 @@ module.exports = {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: `${baseUrl}/auth/github/callback`,
-        //callbackURL: `${process.env.BASE_URL || `http://localhost:${process.env.PORT || 8080}`}/auth/github/callback`,
-        //callbackURL: `${process.env.BASE_URL || 'http://localhost:${process.env.PORT || 8080'}/auth/github/callback`,
         scope: ['read:user', 'user:email'],
     },    
 };
