@@ -12,6 +12,7 @@ module.exports = {
     github: {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        sessionSecret: process.env.SESSION_SECRET,
         callbackURL: `${baseUrl}/auth/github/callback`,
         scope: ['read:user', 'user:email'],
     },    
